@@ -33,7 +33,7 @@ DEBUG = False
 # that Azure automatically creates for us.
 
 ALLOWED_HOSTS = [os.environ.get("WEBSITE_HOSTNAME")]
-# CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS")
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS")
 
 LOGIN_URL = "login/"
 
