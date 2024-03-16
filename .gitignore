@@ -1,0 +1,15 @@
+utilis-venv/
+.vscode/
+.vs/
+**/__pycache__/
+*.pdf
+*.ipynb
+*.docx
+*.ipynb
+*.pptx
+*.zip
+*.pickle
+*.env
+*/uose/search_analytics/
+
+

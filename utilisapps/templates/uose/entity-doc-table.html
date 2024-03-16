@@ -1,0 +1,79 @@
+<form class="ui form" method="post">
+  {% csrf_token %}
+  <div class="field">
+    <input type="hidden" name="entity" value="{{ selected_entity }}">
+  </div>
+  <div class="field">
+    <input type="hidden" name="uose_docket" value="{{ selected_docket }}">
+  </div>
+  <div class="field">
+    <input type="hidden" name="issued_date_from" value="{{ sel_date_from }}">
+  </div>
+  <div class="field">
+    <input type="hidden" name="issued_date_to" value="{{ sel_date_to }}">
+  </div>
+  <button class="ui primary button" type="submit" name="excel_download">Export to Excel</button>
+</form>
+{% if messages %}
+<div class="ui message">
+  <ul class="list">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+<table class="ui celled collapsing scrolling table" style="width: 100%; height: 100%">
+  <thead>
+    <tr>
+      <th>Document Id</th>
+      <th>Regulator</th>
+      <th>Date Issued</th>
+      <th>Docket / Case Number</th>
+      <th>Document Type</th>
+      <th>Document Title</th>
+      <th>Document Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for document in documents %}
+    <tr>
+      <td class="ui">{{document.id}}</td>
+      <td class="ui">{{document.entity_id}}</td>
+      <td class="ui">{{document.issued_by_entity_date}}</td>
+      <td class="ui">{{document.document_type}}</td>
+      <td class="ui">{{document.case_number}}</td>
+      <td class="ui">
+        <p style="word-break: break-all;">{{document.filename_description}}</p>
+      </td>
+      <td>
+        <div class="ui buttons">
+          <a href="/document-viewer/{{document.id}}" class="ui primary basic button">Display</a>
+          <a href="{{document.file_url}}" target="_blank" rel="noopener" class="ui secondary basic button">Download</a>
+        </div>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="6">No documents found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="ui pagination menu center aligned">
+  {% if documents.has_previous %}
+  <a href="?page={{ documents.previous_page_number }}&entity={{ selected_entity }}&issued_date_from={{ sel_date_from }}&issued_date_to={{ sel_date_to }}"
+    class="item">Previous</a>
+  {% endif %} {% for page in documents.paginator.page_range %}
+  {% if documents.number == page %}
+  <a href="?page={{ page }}&entity={{ selected_entity }}&issued_date_from={{ sel_date_from }}&issued_date_to={{ sel_date_to }}"
+    class="active item">{{ page }}</a>
+  {% else %}
+  <a href="?page={{ page }}&entity={{ selected_entity }}&issued_date_from={{ sel_date_from }}&issued_date_to={{ sel_date_to }}"
+    class="item">{{ page }}</a>
+  {% endif %} {% endfor %} {% if documents.has_next %}
+  <a href="?page={{ documents.next_page_number }}&entity={{ selected_entity }}&issued_date_from={{ sel_date_from }}&issued_date_to={{ sel_date_to }}"
+    class="item">Next</a>
+  {% endif %}
+</div>

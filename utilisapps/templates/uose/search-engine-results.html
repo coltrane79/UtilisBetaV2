@@ -1,0 +1,85 @@
+{% extends 'base/index.html' %}
+{% block content %}
+
+<h2 class="ui header">Keyword Search Results</h2>
+<p>Number of Documents Founds: {{search_count}}</p>
+<form class="ui form" action="/search-engine" method="GET">
+    <div id="docSelectionSection" class="ui attached sesgment">
+        <h3 class="ui header">Search Criteria</h3>
+        <div class="field">
+            <label>Entity</label>
+            <select name="entity" class="ui dropdown" value="{{entity}}" readonly>
+                {% for entity in entities %}
+                <option id="uose-entity_input">{{entity}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="field">
+            <label>Issued Date From</label>
+            <input id="uose-date_from_input" type="date" name="issued_date_from" value="{{issued_date_from}}"
+                readonly />
+        </div>
+        <div class="field">
+            <label>Issued Date To</label>
+            <input id="uose-date_to_input" type="date" name="issued_date_to" value="{{issued_date_to}}" readonly />
+        </div>
+    </div>
+</form>
+</div>
+<form class="ui form" method="post">
+    {% csrf_token %}
+    <div class="field">
+        <input type="hidden" name="entity" value="{{ selected_entity }}">
+    </div>
+    <div class="field">
+        <input type="hidden" name="issued_date_from" value="{{ issued_date_from }}">
+    </div>
+    <div class="field">
+        <input type="hidden" name="issued_date_to" value="{{ issued_date_to }}">
+    </div>
+    <input type="hidden" name="kw_list" value="">
+    <button class="ui primary button" type="submit" name="excel_download">Export to Excel</button>
+    <button class="ui primary button" type="submit" name="pdf_download">Export to PDF</button>
+    <a href="/search-engine" class="ui primary button">New Search</a>
+</form>
+<!-- <div class="ui segment resizable scrolling"> -->
+<table class="ui very compact striped table scrolling resizeable">
+    <thead>
+        <tr>
+            <th class="three wide">URL</th>
+            <th class="three wide">Page Number</th>
+            <th class="three wide">Keyword</th>
+            <th class="three wide">Count of Keyword</th>
+            <th class="three wide">Text</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in search_results %}
+        <tr>
+            <td class="ui">
+                <p style="word-break: break-all;">{{result.0}}</p>
+            </td>
+            <td class="ui">{{result.1}}</td>
+            <td class="ui">{{result.2}}</td>
+            <td class="ui">{{result.3}}</td>
+            <td class="ui">{{result.4}}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No documents found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="ui modal" id="loading-modal">
+    <div class="header">Generating Files</div>
+    <div class="content">
+        <div class="ui active inverted dimmer">
+            <div class="ui text loader">Generating Files - Please Wait</div>
+        </div>
+    </div>
+</div>
+<!-- </div> -->
+
+{% endblock %}

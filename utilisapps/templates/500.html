@@ -1,0 +1,26 @@
+{% extends 'base/index.html' %}
+
+{% block content %}
+<div class="ui container">
+    <div class="ui negative message">
+        <div class="header">Page Not Found</div>
+        {% for message in messages %}
+        <div class="ui message">
+            <div class="header">
+                Server Error - 500
+            </div>
+            <p>{{message}}</p>
+        </div>
+        {% empty %}
+        <div class="ui message">
+            <div class="header">
+                Server Error - 500
+            </div>
+            <p>There was an error processing your request - please contact system administrator</p>
+        </div>
+
+        {% endfor %}
+    </div>
+    <a class="ui primary button" href="/">Go back to Home Dashboard</a>
+</div>
+{% endblock %}

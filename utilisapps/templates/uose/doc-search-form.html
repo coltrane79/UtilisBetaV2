@@ -1,0 +1,30 @@
+{% block search_doc_form %}
+<form action="/document-viewer" method="GET" class="ui form">
+  {% csrf_token %}
+  <div class="ui attached">
+    <h4 class="sub header">Search Criteria</h4>
+    <div class="ui divider"></div>
+  </div>
+  <div class="three fields">
+    <div class="field">
+      <label>Entity</label>
+      <select name="entity" class="ui dropdown">
+        {% for entity in entities %}
+        <option id="uose-entity_input" value="{{entity}}">{{entity}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label>Issued Date From</label>
+      <input id="uose-date_from_input" type="date" name="issued_date_from" value="{{sel_date_from}}" />
+    </div>
+    <div class="field">
+      <label>Issued Date To</label>
+      <input id="uose-date_to_input" type="date" name="issued_date_to" value="{{sel_date_to}}" />
+    </div>
+  </div>
+  <button id="btn_submit_doc_query" class="ui button" type="submit">
+    Search
+  </button>
+</form>
+{%endblock%}

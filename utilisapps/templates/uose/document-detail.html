@@ -1,0 +1,349 @@
+{% extends 'base/index.html' %} {% block content %}
+<div class="ui attached" style="padding-top: 20px;">
+    <input type="hidden" id="uose_doc_id" name="document_id" value="{{ doc_id }}">
+    <h2 class="ui header">Displaying Regulatory Document > {{ doc_id }} - {{ record.document_type}}
+    </h2>
+    <div class="ui divider"></div>
+</div>
+<div class="ui attached">
+    <div class="ui grid">
+        <div class="three wide column">
+            <div class="ui segment">
+                <h4 class="ui dividing header">Related Documents</h4>
+                <table class="ui long scrolling table" style="height: 500px;">
+                    <tbody>
+                        {% for document in related_docs %}
+                        <tr>
+                            <td>
+                                <div class="ui card">
+                                    <div class="content">
+                                        <div class="header">{{ document.document_type }}</div>
+                                        <div class="meta"><b>{{ document.issued_by_entity_date }}</b></div>
+                                        <div class="description">{{ document.filename_description }}</div>
+                                    </div>
+                                    <div class="extra content">
+                                        <a href="{{document.id}}">View Document - {{document.id}}</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="eight wide column">
+            <div class="ui padded sgement">
+                <h6 class="ui dividing header">Document Actions</h6>
+                <button class="ui button small primary" id="uose_btn_create_note">
+                    Create New Note
+                </button>
+                <button class="ui button small primary" id="uose_btn_favorite">
+                    {% if is_favorite %}
+                    <i class="star icon"></i>
+                    Remove from Favorites
+                    {% else %}
+                    <i class="star outline icon"></i>
+                    Mark as Favorite
+                    {% endif %}
+                </button>
+                <button class="ui button small primary" id="uose_btn_add_to_group">
+                    {% if is_client_group %}
+                    Remove from Client Group
+                    {% else %}
+                    Add to Client Group
+                    {% endif %}
+                </button>
+                <select class="ui compact search selection dropdown" id="uose_client_group">
+                    {% for client in client_groups %}
+                    <option value="{{client.client_code}}" name="{{client.client_name}}">{{client.client_name}}</option>
+                    {% empty %}
+                    <option value="">No Client Group</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="ui padded segment">
+                <form class="ui large form" style="padding-top: 5px;">
+                    <h4 class="ui dividing header">Entity Information</h4>
+                    <div class="three fields">
+                        <div class="field two wide">
+                            <label>Entity</label>
+                            <input type="text" value="{{ record.entity_id }}" readonly>
+                        </div>
+                        <div class="field seven wide">
+                            <label>Applicant</label>
+                            <input type="text" value="{{ record.applicant_id }}" readonly>
+                        </div>
+                        <div class="field seven wide">
+                            <label>Submitter</label>
+                            <input type="text" value="{{ record.submitter_id }}" readonly>
+                        </div>
+                    </div>
+                    <h4 class="ui dividing header">Docket / Case Number</h4>
+                    <div class="two fields">
+                        <div class="field four wide">
+                            <label>Case Number / Docket</label>
+                            <input type="text" value="{{ record.case_number }}" readonly>
+                        </div>
+                        <div class="field twelve wide">
+                            <label>Description</label>
+                            <input type="text" value="{{ record.filename_description }}" readonly>
+                        </div>
+                    </div>
+                    <h4 class="ui dividing header">Document Timeline</h4>
+                    <div class="three fields">
+                        <div class="field">
+                            <label>Issued By Date</label>
+                            <input type="date" value="{{ record.issued_by_entity_date|date:'Y-m-d' }}" readonly>
+                        </div>
+                        <div class="field">
+                            <label>Received By Regulator Date</label>
+                            <input type="date" value="{{ record.received_by_entity_date|date:'Y-m-d'  }}" readonly>
+                        </div>
+                        <div class="field">
+                            <label>Issued By Regulator Date</label>
+                            <input type="date" value="{{ record.issued_by_entity_date|date:'Y-m-d' }}" readonly>
+                        </div>
+                    </div>
+                    <h4 class="ui dividing header">Document Links</h4>
+                    <div class="one fields">
+                        <div class="field sixteen wide">
+                            <label>File URL</label>
+                            <div class="ui left action input">
+                                <button class="ui labeled icon button">
+                                    <i class="download icon"></i>
+                                    <a href="{{ record.file_url }}" target="_blank">Download</a>
+                                </button>
+                                <input type="text" value="{{ record.file_url }}" readonly>
+                                <!-- <button class="ui icon button" id="uose_show_file_url">
+                                    <i class="eye icon"></i>
+                                </button> -->
+                            </div>
+                            <!-- <input type="text" value="{{ record.file_url }}" readonly> -->
+                        </div>
+                    </div>
+                    <div class="one fields">
+                        <div class="field sixteen wide">
+                            <label>Regulator URL</label>
+                            <div class="ui left action input">
+                                <button class="ui labeled icon button">
+                                    <i class="linkify icon"></i>
+                                    <a href="{{ record.link }}" target="_blank">Open Link</a>
+                                </button>
+                                <input type="text" value="{{ record.link }}" readonly>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <!-- <div class="ui scrolling segment">
+                <h4 class="ui dividing header">Add New Note</h4>
+
+            </div> -->
+
+        </div>
+        <div class="five wide column" style="height:100%;">
+            <div class="ui segment" style="height:100%;">
+                <h5 class="ui dividing header">Notes / Conversation History</h5>
+                <div class="ui connected feed">
+                    {% for note in document_notes %}
+                    <div class="event" id="uose_note_{{id}}">
+                        <div class="label">
+                            <i class="pencil icon"></i>
+                        </div>
+                        <div class="label">
+                            <i class="user circle icon" style="visibility: visible;"></i>
+                        </div>
+                        <div class="content">
+                            <div class="summary">
+                                <a class="user">
+                                    {{note.user.first_name}} {{note.user.last_name}}
+                                </a> created a note on
+                                <div class="date">
+                                    {{note.note_date|date:'Y-m-d'}}
+                                </div>
+                            </div>
+                            <div class="extra text" style="padding-bottom: 5px;">
+                                <p><b>Page Ref: {{note.page_number}}</b></p>
+                                <p><i>Text Ref from {{record.filename_description}}:</i></p>
+                                <p><i>{{note.text_reference}}</i></p>
+                                <hr />
+                                <p><b>Comment / Note</b></p>
+                                <p>{{ note.note_text }}</p>
+                            </div>
+                            <div class="ui left labeled button" tabindex="0">
+                                <a class="ui basic label">
+                                    Reply to {{note.user.first_name}} {{note.user.last_name}}
+                                </a>
+                                <div class="ui icon button" id="btn_reply" data-note-id="{{note.id}}">
+                                    <i class="fork icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="event">
+                        <div class="label">
+                            <i class="user circle icon" style="visibility: visible;"></i>
+                        </div>
+                        <div class="content">
+                            <div class="summary">
+                                <a class="user">
+                                    No Notes found for document
+                                </a>
+                            </div>
+                        </div>
+                        {%endfor%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add this code above the cursor -->
+
+<div class="ui modal" id="modal_create_note">
+    <i class="close icon"></i>
+    <div class="header">
+        Create New Note on {{ record.filename_description }}
+    </div>
+    <div class="ui segment padded">
+        <form class="ui form" method="POST">
+            {% csrf_token %}
+            <div class="content">
+                <div class="field">
+                    <div class="ui toggle checkbox">
+                        <input type="checkbox" name="notify_partner">
+                        <label>Notify Partner</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="field">
+                        <select class="ui selection dropdown" name="user_to_notify">
+                            {% for u_notify in users_list %}
+                            <option value="{{u_notify.id}}">
+                                {{u_notify.first_name}}
+                                {{u_notify.last_name}}
+                            </option>
+                            {%empty%}
+                            <option value="">No Users Found</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Page Reference</label>
+                    <input type="number" name="uose_page_no_ref" />
+
+                </div>
+                <div class="field" style="padding-top: 10px;">
+                    <textarea rows="4" name="uose_text_document_extract"
+                        placeholder="Text From {{document.filename_description}}"
+                        style="width: 100%; height: 100%"></textarea>
+                </div>
+
+                <div class="field" style="padding-top: 10px;">
+                    <textarea rows="4" name="uose_document_note"
+                        placeholder="Note from {{user.last_name}}, {{user.first_name}}"
+                        style="width: 100%; height: 100%"></textarea>
+                </div>
+                <div class="actions">
+                    <button class="ui button" type="submit">Post</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+    $('.ui.embed').embed();
+
+    function openNoteModal() {
+        $('#modal_create_note').modal('show');
+    }
+
+    // Close modal window
+    function closeNoteModal() {
+        $('#modal_create_note').modal('hide');
+    }
+
+
+    // Add event listener to open modal window for notes
+    document.getElementById("uose_btn_create_note").addEventListener("click", function () {
+        openNoteModal();
+    });
+
+    // to add to favorites
+    document.getElementById("uose_btn_favorite").addEventListener("click", function () {
+        const doc_id = document.getElementById("uose_doc_id").value;
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const request = new Request(
+            'e-maintain-favorite/' + doc_id,
+            {
+                method: 'POST',
+                headers: { 'X-CSRFToken': csrftoken },
+                mode: 'same-origin' // Do not send CSRF token to another domain.
+            }
+        );
+        msg = fetch(request).then(function (response) {
+            if (response.ok) {
+                return response.json()
+            }
+
+        }).then(function (data) {
+            btn = document.getElementById("uose_btn_favorite")
+            if (data.is_favorite) {
+                btn.innerHTML = '<i class="star icon"></i> Remove from Favorites'
+            } else {
+                btn.innerHTML = '<i class="star outline icon"></i> Mark as Favorite'
+            }
+            $.toast({
+                position: 'top center',
+                title: 'Mark as Favorite',
+                message: data.message
+            });
+        })
+    });
+
+    // to add to Client Groups
+    document.getElementById("uose_btn_add_to_group").addEventListener("click", function () {
+        const docId = document.getElementById("uose_doc_id").value;
+        const clientGroupName = document.getElementById("uose_client_group").value;
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const uri = 'e-client-group/' + docId + '/' + clientGroupName;
+        console.log(uri)
+        const request = new Request(
+            uri,
+            {
+                method: 'POST',
+                headers: { 'X-CSRFToken': csrftoken },
+                mode: 'same-origin', // Do not send CSRF token to another domain.
+                data: {
+                    clientGroup: clientGroupName
+                },
+                contentType: 'application/json; charset=utf-8'
+            }
+        );
+        msg = fetch(request).then(function (response) {
+            if (response.ok) {
+                return response.json()
+            }
+
+        }).then(function (data) {
+            btn = document.getElementById("uose_btn_add_to_group")
+            if (data.is_client_group) {
+                btn.innerHTML = 'Remove from Client Group'
+            } else {
+                btn.innerHTML = 'Add to Client Group'
+            }
+            $.toast({
+                position: 'top center',
+                title: 'Client Group Maintenance',
+                message: data.message
+            });
+        })
+    });
+</script>
+{% endblock %}

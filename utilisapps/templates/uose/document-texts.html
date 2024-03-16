@@ -1,0 +1,25 @@
+<h4 class="ui dividing header">Document Text</h4>
+<div class="ui fluid raised large card">
+    <div class="content">
+        <div class="header">
+            <div>Viewing Page {{ page_text.number }} of {{ page_text.paginator.num_pages }}</div>
+            <div class="ui buttons">
+                {% if page_text.has_previous %}
+                <a href="?page={{ page_text.previous_page_number }}" class="ui button">Previous</a>
+                {% endif %}
+                {% if page_text.has_next %}
+                <a href="?page={{ page_text.next_page_number }}" class="ui button">Next</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="description">
+            {% for page in pages %}
+            <p>{{ page }}</p>
+            {% empty %}
+            <p>No document text available</p>
+            {% endfor %}
+        </div>
+
+
+    </div>
+</div>

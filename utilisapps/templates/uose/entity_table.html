@@ -1,0 +1,27 @@
+{% extends "base/index.html" %} {% block e_type_table %}
+
+<div class="ui large fluid card">
+  <div class="content">
+    <div class="header">Entity Types</div>
+  </div>
+  <div class="content">
+    <table id="tbl_entity_types" class="ui celled table">
+      <thead>
+        <tr>
+          <th>Entity Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e_type in e_types %}
+        <tr>
+          <td>{{ e_type.entity_type }}</td>
+          <td>{{ e_type.entity_type_description }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% block h_app_nav %}
+<div class="ui padded grid">
+  <style type="text/css">
+    #sidebar {
+      position: fixed;
+      height: 100vh;
+      background-color: #f5f5f5;
+      padding-top: 68px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    #sidebar .ui.menu > a.item {
+      padding: 10px 20px;
+      line-height: 20px;
+      color: #337ab7;
+      border-radius: 0 !important;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    #sidebar .ui.menu > a.item.active {
+      background-color: #337ab7;
+      color: white;
+      border: none !important;
+    }
+
+    #sidebar .ui.menu > a.item:hover {
+      background-color: #eee;
+      color: #23527c;
+    }
+  </style>
+  <div
+    class="three wide tablet only three wide computer only column"
+    id="sidebar"
+  >
+    <div class="content">
+      <div class="ui vertical borderless fluid text menu">
+        <a class="active item">Dashboard</a>
+        <a class="item">My Documents</a>
+      </div>
+    </div>
+    <div class="ui styled fluid accordion">
+      <div class="title">
+        <i class="dropdown icon"></i>
+        Applications
+      </div>
+      <div class="content">
+        <div class="ui vertical borderless fluid text menu">
+          <a class="item">Entity Document Viewer</a>
+          <a class="item">Document Lists</a>
+          <a class="item">Keyword Search Engine</a>
+          <a class="item">Interrogatories Parser</a>
+          <a class="item">OEB Open Data Viewer</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

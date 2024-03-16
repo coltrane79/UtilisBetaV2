@@ -1,0 +1,34 @@
+{% extends 'base/index.html' %}
+{% block content %}
+<div class="ui attached" style="padding-top: 20px;">
+  <h2 class="ui header">Document Browser</h2>
+  <div class="ui divider"></div>
+  <div class="ui attached">
+    {% include 'uose/doc-search-form.html' %}
+  </div>
+
+  <div class="ui attached" style="padding-top: 10px;">
+    <h4 class="sub header">Search Results</h4>
+    <div class="ui divider"></div>
+  </div>
+
+  <div class="ui modal" id="loading-modal">
+    <div class="header">Retrieving Documents</div>
+    <div class="content">
+      <div class="ui active inverted dimmer">
+        <div class="ui text loader">Retrieving Documents</div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'uose/entity-doc-table.html' %}
+</div>
+
+<script>
+  submit_btn = document.getElementById('btn_submit_doc_query');
+  submit_btn.addEventListener('click', function () {
+    $('.ui.modal').modal('show')
+      ;
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'base/index.html' %}
+
+{% block content %}
+
+
+<h2 class="ui header">Keyword Search</h2>
+<form class="ui form" action="/search-engine" method="GET">
+
+    <div class="ui segment">
+        <button id="uose_execute_kw_search" class="ui primary button" type="submit" name="kw_search_documents">Execute
+            Keyword Search</button>
+        <button class="ui primary button" type="submit" name="check_documents">View Document List</button>
+    </div>
+
+    <div class="ui grid">
+        <div class="twelve wide column">
+            <div id="docSelectionSection" class="ui attached segment">
+                <h3 class="ui header">Document Ranges</h3>
+                <div class="field">
+                    <label>Entity</label>
+                    <select name="entity" class="ui dropdown" value="{{entity}}">
+                        {% for entity in entities %}
+                        <option id="uose-entity_input">{{entity}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Issued Date From</label>
+                    <input id="uose-date_from_input" type="date" name="issued_date_from" value="{{sel_date_from}}" />
+                </div>
+                <div class="field">
+                    <label>Issued Date To</label>
+                    <input id="uose-date_to_input" type="date" name="issued_date_to" value="{{sel_date_to}}" />
+                </div>
+            </div>
+            <div id="filterCriteriaSection" class="ui attached segment two wide">
+                <h3 class="ui header">Filter Criteria - Document Types / Dockets</h3>
+                <div class="field">
+                    <label>Dockets / Case Number</label>
+                    <select name="dockets" multiple="" class="ui fluid dropdown" value="EB-2022-0200">
+                        {% for dockets in dockets %}
+                        <option value="{{ dockets }}" name="dockets">{{ dockets }}</option>
+                        {% endfor %}
+                        <!-- Add options here -->
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Document Types</label>
+                    <select class="ui fluid dropdown" name="doc_types" multiple="" value>
+                        {% for doc_type in document_types %}
+                        <option value="{{ doc_type }}" name="document_types">{{ doc_type }}</option>
+                        {% endfor %}
+                        <!-- Add options here -->
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="four wide column">
+            <div id="keywordCriteriaSection" class="ui attached segment">
+                <h3 class="ui header">Keywords</h3>
+                <input type="hidden" name="kw_list" value="">
+                <div class="field">
+                    <label>Add Keyword</label>
+                    <div class="ui action input">
+                        <input type="text" name="keyword" placeholder="Keyword">
+                    </div>
+                    <button class="ui button" id="addKeyword">Add</button>
+                </div>
+                <table class="ui celled table">
+                    <thead>
+                        <tr>
+                            <th>Keyword</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Add keyword rows here -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+</form>
+
+<div class="ui modal" id="loading-modal">
+    <div class="header">Executing Search</div>
+    <div class="content">
+        <div class="ui active inverted dimmer">
+            <div class="ui text loader">Executing Keyword Search - Please Wait</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.ui.dropdown').dropdown();
+    submit_btn = document.getElementById('uose_execute_kw_search');
+    submit_btn.addEventListener('click', function (evt) {
+        $('.ui.modal').modal('show')
+            ;
+    });
+    document.getElementById('addKeyword').addEventListener('click', function (evt) {
+        evt.preventDefault();
+        // Add Keyword to the Table for presentation
+        var keyword = document.querySelector('input[name="keyword"]').value;
+        var table = document.querySelector('#keywordCriteriaSection table tbody');
+        var row = table.insertRow(table.rows.length);
+        var cell = row.insertCell(0);
+        cell.innerHTML = keyword;
+        // Append key to input
+        var kw_list = document.querySelector('input[name="kw_list"]');
+        console.log("BEFORE:", kw_list.value);
+        kw_list.value = kw_list.value + '|' + keyword;
+        console.log("AFTER:", kw_list.value)
+    });
+</script>
+{% endblock %}

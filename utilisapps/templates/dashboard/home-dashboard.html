@@ -1,0 +1,127 @@
+{% extends 'base/index.html' %}
+{% block content %}
+<div class="container" style="padding-top: 20px;">
+  <h2 class="ui header">Welcome to Utilis Pursuit Web Applications - Home</h2>
+  <div class="ui divider"></div>
+</div>
+
+<div class="ui segment">
+  <p>The Utilis Pursuit Regulatory Information System (RIS) serves as a comprehensive platform designed to streamline
+    access and management of critical documents within the regulatory framework. This system offers a user-friendly
+    interface, empowering users to effortlessly navigate and retrieve essential information vital to compliance and
+    decision-making processes.</p>
+</div>
+
+<div class="container" style="padding-top: 20px;">
+  <h2 class="ui header">Quick Links</h2>
+  <div class="ui divider"></div>
+</div>
+<div class="ui three cards">
+  <div class="ui card">
+    <div class="content">
+      <div class="header">My Inbox</div>
+      <div class="description">
+        <p>Messages and Notes from other Partners</p>
+      </div>
+    </div>
+    <div class="extra content">
+      <i class="check icon"></i>
+      <a href="inbox/">1 Messages Waiting</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="container" style="padding-top: 20px;">
+  <h2 class="ui header">Application Links</h2>
+  <div class="ui divider"></div>
+</div>
+<div class="ui three cards">
+  <div class="card">
+    <div class="content">
+      <div class="header">Regulator Document Viewer</div>
+      <div class="description">
+        Generate Lists of documents from Each Regulator, and export to various formats. Search by Regulator,
+        and Date Ranges
+      </div>
+    </div>
+    <div class="extra content">
+      <a class="ui button" href="/document-viewer">View Regulator Documents</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="content">
+      <div class="header">Docket Document Viewer</div>
+      <div class="description">
+        Generate Lists of documents for Various Dockets / Case Numbers, and export to various formats. Search by Docket,
+        Regulator,
+        Applicant/Submitter and Date Ranges
+      </div>
+    </div>
+    <div class="extra content">
+      <a class="ui button" href="/docket-viewer">View Docket Listings</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="content">
+      <div class="header">Search Engine</div>
+      <div class="description">
+        Create Analysis and Search the database and generate keyword analysis and Reports
+        for various regulatory documents
+      </div>
+    </div>
+    <div class="extra content">
+      <a class="ui button" href="/search-engine">Keyword Search / Analysis</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="content">
+      <div class="header">Regulator Docket / Applications</div>
+      <div class="description">
+        Explore Dockets and Applications for various Regulators and link to the documents
+        release for each docket / application.
+      </div>
+    </div>
+    <div class="extra content">
+      <a class="ui button" href="/dockets-applications">View Applications</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="content">
+      <div class="header">Interrogatory to Response</div>
+      <div class="description">
+        Review Interrogatories for Docket / Case Numbers and generate templates for responses
+        manually and export to Excel or Word Templates
+      </div>
+    </div>
+    <div class="extra content">
+      <a class="ui button" href="/i2r-selection">I2R Parser</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="content">
+      <div class="header">My Documents</div>
+      <div class="description">
+        View Favorite Documents, Dockets and Saved Keyword Searches
+      </div>
+    </div>
+    <div class="extra content">
+      <a class="ui button" href="/inbox">My Documents</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="content">
+      <div class="header">OEB Analytics</div>
+      <div class="description">
+        Access analytics applications related to OEB Open Data
+      </div>
+    </div>
+    <div class="extra content">
+      <a class="ui button" href="/regulator-open-data">My Documents</a>
+    </div>
+  </div>
+</div>
+</div>
+
+
+{% endblock %}

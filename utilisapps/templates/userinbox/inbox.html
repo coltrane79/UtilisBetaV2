@@ -1,0 +1,146 @@
+{% extends 'base/index.html' %}
+
+{% block content %}
+<div class="ui form segment">
+    <h3 class="ui dividing header">Basic Information</h3>
+    <div class="fields">
+        <div class="field">
+            <label>User Name</label>
+            <input type="text" name="username" placeholder="User Name" value="{{user.username}}" readonly>
+        </div>
+        <div class="field">
+            <label>First Name</label>
+            <input type="text" name="firstname" placeholder="First Name" value="{{user.first_name}}" readonly>
+        </div>
+        <div class="field">
+            <label>Last Name</label>
+            <input type="text" name="lastname" placeholder="Last Name" value="{{user.last_name}}" readonly>
+        </div>
+        <div class="field">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Last Name" value="{{user.email}}" readonly>
+        </div>
+    </div>
+</div>
+<div class="ui segment">
+    <h3 class="ui dividing header">Inbox and Documents</h3>
+    <div class="ui top attached tabular menu">
+        <a class="item active" data-tab="one">Messages</a>
+        <a class="item" data-tab="two">Favorite Documents</a>
+        <a class="item" data-tab="three">Client Documents</a>
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="one">
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>Message Date</th>
+                    <th>Type</th>
+                    <th>Sender</th>
+                    <th>Message Text</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for msg in user_messages %}
+                <tr>
+                    <td>{{msg.message_date|date:'Y-m-d'}}</td>
+                    <td>{{msg.message_type.message_type_description}}</td>
+                    <td>{{msg.sending_user.first_name}} {{msg.sending_user.last_name}}</td>
+                    <td>{{msg.message_text}}</td>
+                    <td>
+                        <a class="ui button primary" href="/document-viewer/{{msg.entity_doc_ref.id}}">View</a>
+                    </td>
+                <tr>
+                    {% empty %}
+                <tr>
+                    <td>No Messages</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="two">
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Entity</th>
+                    <th>File Description</th>
+                    <th>Link</th>
+                    <th>Issued by Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for document in favorite_documents %}
+                <tr>
+                    <td>{{document.id}}</td>
+                    <td>{{document.entity}}</td>
+                    <td>{{document.filename_description}}</td>
+                    <td><a class="ui button primary" href="/document-viewer/{{document.id}}">Link</a></td>
+                    <td>{{document.issued_by_entity_date}}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>No Favorite</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="ui bottom attached tab segment active" data-tab="three">
+        <div class="ui segment">
+            <form>
+                {% csrf_token %}
+                <label class="ui">Client Group</label>
+                <select class="ui compact search selection dropdown" id="uose_client_group"
+                    name="selected_client_group">
+                    {% for client in client_groups %}
+                    <option value="{{client.client_code}}" name="{{client.client_name}}">{{client.client_name}}</option>
+                    {% empty %}
+                    <option value="">No Client Group</option>
+                    {% endfor %}
+                </select>
+                <button class="ui button primary" type="submit" name="get_client_docs">Fetch Client Docs</button>
+            </form>
+        </div>
+        <table class="ui celled table">
+            <h4 class="ui header">Displaying Documents for Client Group {{selected_client}}</h4>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Entity</th>
+                    <th>File Description</th>
+                    <th>Link</th>
+                    <th>Issued by Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for document in client_group_documents %}
+                <tr>
+                    <td>{{document.id}}</td>
+                    <td>{{document.entity}}</td>
+                    <td>{{document.filename_description}}</td>
+                    <td><a class="ui button primary" href="/document-viewer/{{document.id}}">Link</a></td>
+                    <td>{{document.issued_by_entity_date}}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>No Client Documents</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.ui .item').on('click', function () {
+            $('.ui .item').removeClass('active');
+            $(this).addClass('active');
+
+            const tab = $(this).attr("data-tab");
+            $(".tab.segment").removeClass("active");
+            $(".tab.segment[data-tab=\"" + tab + "\"]").addClass("active");
+        });
+    });
+</script>
+{% endblock %}
