@@ -32,8 +32,8 @@ DEBUG = False
 # Configure the domain name using the environment variable
 # that Azure automatically creates for us.
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
+ALLOWED_HOSTS = [os.environ.get("WEBSITE_HOSTNAME")]
+# CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS")
 
 LOGIN_URL = "login/"
 
@@ -157,11 +157,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = BASE_DIR / "static"
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
-    BASE_DIR / "static/dist/",
+    # BASE_DIR / "static",
+    BASE_DIR
+    / "static/dist/",
 ]
 
 # Default primary key field type
