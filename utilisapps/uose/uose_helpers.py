@@ -182,7 +182,9 @@ def generate_excel_search_results(
         # save to temporary file location
         uid = uuid.uuid4()
         df.to_excel(
-            os.path.join(str(dir), "temp", f"utilis_report_{uid}.xlsx"), index=False
+            os.path.join(str(dir), "temp", f"utilis_report_{uid}.xlsx"),
+            index=False,
+            engine="xlsxwriter",
         )
         return 0, os.path.join(dir, "temp", f"utilis_report_{uid}.xlsx")
     except Exception as e:
