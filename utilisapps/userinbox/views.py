@@ -100,6 +100,6 @@ def change_password(request):
     else:
         return render(
             request,
-            "userinbox/password_change.html",
+            "userinbox/change_password.html",
             {"pswd_chg_form": pswd_chng_form},
         )
