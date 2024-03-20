@@ -4,10 +4,11 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
-from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 from uose.models import (
     UserEntityDocuments,
@@ -18,6 +19,20 @@ from uose.models import (
 
 
 @login_required
+def inbox(request):
+    """
+    Renders the inbox page with user messages, favorite documents, client groups, and client group documents.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered inbox page.
+
+    """
+    # Rest of the code...
+
+
 def inbox(request):
 
     # messages
@@ -61,3 +76,30 @@ def inbox(request):
             "client_group_documents": client_group_documents,
         },
     )
+
+
+@login_required
+def change_password(request):
+
+    pswd_chng_form = PasswordChangeForm(request.user)
+
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, "Your password was successfully updated!")
+            return redirect("/inbox")
+        else:
+            return render(
+                request,
+                "userinbox/password_change.html",
+                {"pswd_chg_form": pswd_chng_form},
+            )
+
+    else:
+        return render(
+            request,
+            "userinbox/password_change.html",
+            {"pswd_chg_form": pswd_chng_form},
+        )

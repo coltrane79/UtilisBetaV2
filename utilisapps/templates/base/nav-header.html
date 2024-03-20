@@ -2,14 +2,14 @@
 {% block nav_header %}
 <div class="ui tablet computer only padded grid">
   <div class="ui inverted borderless top fixed fluid menu">
-    <a class="header item">
+    <a class="header item" href="/">
       <img src="{% static 'dist/images/logo.webp' %}" class="ui tiny image" />
       Utilis Pursuit Portal
     </a>
 
     <div class="right menu">
       {% if user.is_authenticated %}
-      <a href="inbox/" class="item">
+      <a href="/inbox" class="item">
         <i class="user circle icon" style="visibility: visible;"></i>
         {{ user.first_name}} {{ user.last_name }}
       </a>
