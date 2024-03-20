@@ -160,7 +160,7 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    # BASE_DIR / "static",
     BASE_DIR / "static/dist/",
     BASE_DIR / "static/admin/",
 ]
